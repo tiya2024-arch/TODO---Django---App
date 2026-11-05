@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>All Tasks</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Done</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr class="{% if task.is_done %}done{% else %}pending{% endif %}">
+            <td class="title">{{ task.title }}</td>
+            <td class="desc">{{ task.description }}</td>
+            <td>
+                <form method="post" action="{% url 'toggle_task' task.pk %}">
+                    {% csrf_token %}
+                    {% if task.is_done %}
+                        <button type="submit" class="check checked" title="Mark as pending">&#10003;</button>
+                    {% else %}
+                        <button type="submit" class="check" title="Mark as completed"></button>
+                    {% endif %}
+                </form>
+            </td>
+            <td>{{ task.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+                <div class="actions">
+                    <a href="{% url 'edit_task' task.pk %}" class="btn btn-yellow">Edit</a>
+                    <form method="post" action="{% url 'delete_task' task.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-red">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="empty">No tasks yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

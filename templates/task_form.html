@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ heading }}</h2>
+
+<form method="post" class="task-form">
+    {% csrf_token %}
+
+    <label for="{{ form.title.id_for_label }}">Title</label>
+    {{ form.title }}
+    {{ form.title.errors }}
+
+    <label for="{{ form.description.id_for_label }}">Description</label>
+    {{ form.description }}
+    {{ form.description.errors }}
+
+    <div class="form-buttons">
+        <button type="submit" class="btn btn-blue">Save</button>
+        <a href="{% url 'task_list' %}" class="btn btn-grey">Cancel</a>
+    </div>
+</form>
+{% endblock %}
